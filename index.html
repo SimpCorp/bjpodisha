@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Odisha Promise Tracker</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: #050816;
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-glow {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255, 132, 0, 0.22), transparent 70%);
+      top: -120px;
+      right: -120px;
+      z-index: -1;
+    }
+
+    .bg-glow-2 {
+      position: fixed;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(0, 255, 170, 0.12), transparent 70%);
+      bottom: -120px;
+      left: -120px;
+      z-index: -1;
+    }
+
+    header {
+      padding: 24px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .badge {
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      color: #cbd5e1;
+      font-size: 13px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+    }
+
+    main {
+      padding: 55px 8% 40px;
+    }
+
+    .hero {
+      max-width: 1100px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(249, 115, 22, 0.13);
+      color: #fb923c;
+      font-size: 14px;
+      border: 1px solid rgba(249, 115, 22, 0.25);
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: 0.95;
+      letter-spacing: -3px;
+      margin-bottom: 22px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #fb923c, #ffffff, #22c55e);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      max-width: 720px;
+      margin: auto;
+      color: #cbd5e1;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .countdown-box {
+      margin: 45px auto 30px;
+      max-width: 900px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+    }
+
+    .countdown-title {
+      color: #94a3b8;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 18px;
+    }
+
+    .timer {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .time-card {
+      padding: 22px 10px;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .time-card h2 {
+      font-size: clamp(28px, 5vw, 46px);
+      color: #ffffff;
+    }
+
+    .time-card p {
+      color: #94a3b8;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+
+    .info-grid {
+      max-width: 1100px;
+      margin: 45px auto 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .info-card {
+      padding: 26px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .info-card span {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .info-card h3 {
+      margin-top: 12px;
+      font-size: 28px;
+    }
+
+    .info-card p {
+      margin-top: 10px;
+      color: #cbd5e1;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .notice {
+      max-width: 900px;
+      margin: 35px auto 0;
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: rgba(234, 179, 8, 0.09);
+      border: 1px solid rgba(234, 179, 8, 0.22);
+      color: #fde68a;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      padding: 45px 20px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    @media (max-width: 800px) {
+      header {
+        padding: 20px 5%;
+      }
+
+      main {
+        padding: 40px 5%;
+      }
+
+      .timer {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        letter-spacing: -1.5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-glow"></div>
+  <div class="bg-glow-2"></div>
+
+  <header>
+    <div class="logo">Odisha Promise Tracker</div>
+    <div class="badge">Public Accountability Dashboard</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="tag">Odisha Government Watch · 2024–2029</div>
+
+      <h1>
+        Tracking promises.<br>
+        <span class="gradient-text">Not vibes.</span>
+      </h1>
+
+      <p class="subtitle">
+        A clean public dashboard to track the promises made by the BJP government in Odisha,
+        including key dates, leadership details, and time left before the next expected Assembly election cycle.
+      </p>
+
+      <div class="countdown-box">
+        <div class="countdown-title">Tentative time left until 2029 Odisha Assembly election cycle</div>
+
+        <div class="timer">
+          <div class="time-card">
+            <h2 id="days">0</h2>
+            <p>Days</p>
+          </div>
+
+          <div class="time-card">
+            <h2 id="hours">0</h2>
+            <p>Hours</p>
+          </div>
+
+          <div class="time-card">
+            <h2 id="minutes">0</h2>
+            <p>Minutes</p>
+          </div>
+
+          <div class="time-card">
+            <h2 id="seconds">0</h2>
+            <p>Seconds</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-grid">
+      <div class="info-card">
+        <span>Government formed</span>
+        <h3>June 2024</h3>
+        <p>
+          BJP formed the government in Odisha after the 2024 Assembly election results.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <span>Chief Minister</span>
+        <h3>Mohan Charan Majhi</h3>
+        <p>
+          Mohan Charan Majhi took oath as the Chief Minister of Odisha on 12 June 2024.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <span>Assembly result</span>
+        <h3>78 / 147 seats</h3>
+        <p>
+          BJP crossed the majority mark in the Odisha Legislative Assembly election.
+        </p>
+      </div>
+    </section>
+
+    <div class="notice">
+      This website is an independent public-information tracker. Promise status tracking will be added later using
+      official sources, manifesto references, government notifications, and verified public records.
+    </div>
+  </main>
+
+  <footer>
+    Built for transparency · Odisha Promise Tracker
+  </footer>
+
+  <script>
+    const electionDate = new Date("2029-06-24T00:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = electionDate - now;
+
+      if (distance <= 0) {
+        document.getElementById("days").innerText = "0";
+        document.getElementById("hours").innerText = "0";
+        document.getElementById("minutes").innerText = "0";
+        document.getElementById("seconds").innerText = "0";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      document.getElementById("days").innerText = days;
+      document.getElementById("hours").innerText = hours;
+      document.getElementById("minutes").innerText = minutes;
+      document.getElementById("seconds").innerText = seconds;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
