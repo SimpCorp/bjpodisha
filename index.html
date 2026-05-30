@@ -4,993 +4,241 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Odisha Promise Tracker</title>
-
   <style>
-    :root {
-      --bg: #f5f1e8;
-      --ink: #161616;
-      --muted: #6b6257;
-      --card: #fffaf0;
-      --line: rgba(22, 22, 22, 0.12);
-      --green: #117a37;
-      --green-soft: #e3f5e9;
-      --orange: #b86100;
-      --orange-soft: #fff0d8;
-      --red: #b42318;
-      --red-soft: #ffe4e0;
-      --black: #111111;
-      --shadow: 0 18px 60px rgba(0, 0, 0, 0.08);
-      --radius: 24px;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(255, 132, 0, 0.12), transparent 35%),
-        linear-gradient(180deg, #f8f3ea 0%, #f5f1e8 100%);
-      color: var(--ink);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .grain {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.35;
-      z-index: -1;
-      background-image:
-        linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
-      background-size: 34px 34px;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(18px);
-      background: rgba(245, 241, 232, 0.78);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav {
-      max-width: 1180px;
-      margin: auto;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      font-size: 20px;
-    }
-
-    .mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      background: var(--black);
-      color: #fff;
-      display: grid;
-      place-items: center;
-      font-size: 14px;
-      box-shadow: 5px 5px 0 rgba(255, 132, 0, 0.35);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 14px;
-      padding: 9px 13px;
-      border-radius: 999px;
-      transition: 0.2s ease;
-    }
-
-    .nav-links a:hover {
-      background: rgba(0,0,0,0.06);
-      color: var(--ink);
-    }
-
-    .wrap {
-      max-width: 1180px;
-      margin: auto;
-      padding: 0 20px;
-    }
-
-    .hero {
-      padding: 74px 0 40px;
-      display: grid;
-      grid-template-columns: 1.08fr 0.92fr;
-      gap: 36px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.45);
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 18px;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 99px;
-      background: var(--green);
-      animation: pulse 1.7s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.45); opacity: 0.5; }
-    }
-
-    h1 {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(48px, 7vw, 86px);
-      line-height: 0.9;
-      letter-spacing: -0.065em;
-      margin-bottom: 22px;
-    }
-
-    .hero p {
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.75;
-      max-width: 650px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 28px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      border-radius: 999px;
-      padding: 13px 18px;
-      font-weight: 800;
-      font-size: 14px;
-      transition: 0.2s ease;
-    }
-
-    .btn.primary {
-      background: var(--black);
-      color: white;
-      box-shadow: 5px 5px 0 rgba(255, 132, 0, 0.35);
-    }
-
-    .btn.primary:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 8px 8px 0 rgba(255, 132, 0, 0.35);
-    }
-
-    .btn.secondary {
-      color: var(--ink);
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.38);
-    }
-
-    .hero-panel {
-      background: var(--black);
-      color: #fff;
-      border-radius: 34px;
-      padding: 24px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .hero-panel::before {
-      content: "";
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      border-radius: 999px;
-      background: rgba(255,132,0,0.24);
-      top: -100px;
-      right: -90px;
-      z-index: -1;
-    }
-
-    .panel-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-      margin-bottom: 24px;
-    }
-
-    .panel-top small {
-      color: rgba(255,255,255,0.58);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .panel-top h2 {
-      font-size: 22px;
-      margin-top: 6px;
-      letter-spacing: -0.04em;
-    }
-
-    .live {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.75);
-      border-radius: 999px;
-      padding: 8px 11px;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .countdown {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
-    .time {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 18px 10px;
-      text-align: center;
-    }
-
-    .time strong {
-      display: block;
-      font-size: clamp(26px, 4vw, 42px);
-      line-height: 1;
-    }
-
-    .time span {
-      display: block;
-      margin-top: 8px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.58);
-    }
-
-    .panel-note {
-      margin-top: 18px;
-      color: rgba(255,255,255,0.58);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .stats {
-      margin: 28px 0 36px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-    }
-
-    .stat {
-      background: rgba(255,250,240,0.82);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 22px;
-      box-shadow: 0 12px 38px rgba(0,0,0,0.04);
-    }
-
-    .stat span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 34px;
-      margin-top: 7px;
-      letter-spacing: -0.05em;
-    }
-
-    .section-head {
-      margin: 58px 0 20px;
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .section-head h2 {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(34px, 4vw, 52px);
-      letter-spacing: -0.055em;
-      line-height: 0.95;
-    }
-
-    .section-head p {
-      color: var(--muted);
-      max-width: 520px;
-      line-height: 1.65;
-      font-size: 15px;
-    }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .filter {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.42);
-      border-radius: 999px;
-      padding: 10px 14px;
-      cursor: pointer;
-      font-weight: 800;
-      font-size: 13px;
-      color: var(--muted);
-      transition: 0.2s ease;
-    }
-
-    .filter.active,
-    .filter:hover {
-      background: var(--black);
-      color: #fff;
-      border-color: var(--black);
-    }
-
-    .promise-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      padding-bottom: 50px;
-    }
-
-    .promise {
-      position: relative;
-      background: rgba(255,250,240,0.88);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 22px;
-      box-shadow: 0 14px 44px rgba(0,0,0,0.045);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      overflow: hidden;
-      animation: rise 0.55s ease both;
-    }
-
-    .promise:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 24px 70px rgba(0,0,0,0.09);
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .promise::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 7px;
-      background: var(--orange);
-    }
-
-    .promise.fulfilled::before { background: var(--green); }
-    .promise.progress::before { background: var(--orange); }
-    .promise.overdue::before { background: var(--red); }
-
-    .promise-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-
-    .promise h3 {
-      font-size: 21px;
-      letter-spacing: -0.04em;
-      line-height: 1.12;
-      max-width: 430px;
-    }
-
-    .status {
-      white-space: nowrap;
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: 12px;
-      font-weight: 900;
-      border: 1px solid;
-    }
-
-    .fulfilled .status {
-      background: var(--green-soft);
-      color: var(--green);
-      border-color: rgba(17,122,55,0.22);
-    }
-
-    .progress .status {
-      background: var(--orange-soft);
-      color: var(--orange);
-      border-color: rgba(184,97,0,0.22);
-    }
-
-    .overdue .status {
-      background: var(--red-soft);
-      color: var(--red);
-      border-color: rgba(180,35,24,0.22);
-    }
-
-    .meta {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin: 18px 0;
-    }
-
-    .meta div {
-      border-radius: 17px;
-      background: rgba(0,0,0,0.035);
-      padding: 12px;
-    }
-
-    .meta span {
-      display: block;
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-bottom: 5px;
-    }
-
-    .meta strong {
-      font-size: 13px;
-      line-height: 1.25;
-    }
-
-    .promise p {
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 14px;
-    }
-
-    .source {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      margin-top: 18px;
-      padding-top: 16px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .source a {
-      color: var(--ink);
-      font-weight: 900;
-      text-decoration: none;
-    }
-
-    .methodology {
-      margin: 20px 0 60px;
-      background: var(--black);
-      color: #fff;
-      border-radius: 34px;
-      padding: 26px;
-      display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 24px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .methodology h2 {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 38px;
-      letter-spacing: -0.05em;
-      line-height: 0.95;
-    }
-
-    .rules {
-      display: grid;
-      gap: 12px;
-    }
-
-    .rule {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 16px;
-      color: rgba(255,255,255,0.75);
-      line-height: 1.55;
-      font-size: 14px;
-    }
-
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 26px 20px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: 0.7s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 900px) {
-      .nav-links {
-        display: none;
-      }
-
-      .hero {
-        grid-template-columns: 1fr;
-        padding-top: 46px;
-      }
-
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .section-head {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .promise-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .methodology {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .wrap {
-        padding: 0 14px;
-      }
-
-      .nav {
-        padding: 14px;
-      }
-
-      .brand {
-        font-size: 17px;
-      }
-
-      .hero {
-        padding-top: 38px;
-      }
-
-      .hero p {
-        font-size: 15px;
-      }
-
-      .countdown {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .stat {
-        padding: 18px;
-      }
-
-      .promise {
-        padding: 18px;
-        border-radius: 22px;
-      }
-
-      .promise-top {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .meta {
-        grid-template-columns: 1fr;
-      }
-
-      .source {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .methodology {
-        border-radius: 24px;
-        padding: 20px;
-      }
-
-      h1 {
-        letter-spacing: -0.055em;
-      }
-    }
+    :root{
+      --bg:#f7f4ed;--ink:#111;--muted:#665f55;--card:#fffdf7;--line:rgba(0,0,0,.12);
+      --green:#147a3b;--greenBg:#e6f5eb;--orange:#c56a00;--orangeBg:#fff0d8;
+      --red:#b42318;--redBg:#ffe4e0;--dark:#151515;--shadow:0 18px 55px rgba(0,0,0,.08)
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(0,0,0,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.035) 1px,transparent 1px);background-size:38px 38px;z-index:-2}
+    body:after{content:"";position:fixed;width:600px;height:600px;right:-250px;top:-250px;background:radial-gradient(circle,rgba(255,127,0,.18),transparent 70%);z-index:-1}
+    header{position:sticky;top:0;z-index:10;background:rgba(247,244,237,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+    nav{max-width:1180px;margin:auto;padding:15px 20px;display:flex;align-items:center;justify-content:space-between}
+    .brand{font-weight:950;letter-spacing:-.04em;font-size:20px;display:flex;align-items:center;gap:10px}
+    .logo{width:34px;height:34px;background:var(--dark);color:#fff;border-radius:12px;display:grid;place-items:center;box-shadow:5px 5px 0 rgba(255,123,0,.28)}
+    .navlinks{display:flex;gap:8px}
+    .navlinks a{text-decoration:none;color:var(--muted);font-size:14px;padding:9px 13px;border-radius:99px}
+    .navlinks a:hover{background:rgba(0,0,0,.06);color:var(--ink)}
+    .wrap{max-width:1180px;margin:auto;padding:0 20px}
+    .hero{padding:72px 0 40px;display:grid;grid-template-columns:1.08fr .92fr;gap:34px;align-items:center}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.45);border-radius:99px;padding:8px 12px;color:var(--muted);font-size:13px;margin-bottom:18px}
+    .pulse{width:8px;height:8px;border-radius:99px;background:var(--green);animation:pulse 1.6s infinite}
+    @keyframes pulse{50%{transform:scale(1.55);opacity:.45}}
+    h1{font-family:Georgia,serif;font-size:clamp(46px,7vw,86px);line-height:.9;letter-spacing:-.07em;margin-bottom:20px}
+    .hero p{font-size:18px;line-height:1.75;color:var(--muted);max-width:660px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .btn{border-radius:99px;padding:13px 18px;text-decoration:none;font-weight:850;font-size:14px}
+    .btn.dark{background:var(--dark);color:#fff;box-shadow:5px 5px 0 rgba(255,123,0,.28)}
+    .btn.light{border:1px solid var(--line);color:var(--ink);background:rgba(255,255,255,.45)}
+    .panel{background:var(--dark);color:#fff;border-radius:34px;padding:24px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+    .panel:before{content:"";position:absolute;width:260px;height:260px;background:rgba(255,127,0,.24);border-radius:50%;right:-90px;top:-90px}
+    .panel>*{position:relative}
+    .panelTop{display:flex;justify-content:space-between;gap:12px;margin-bottom:22px}
+    .panel small{color:rgba(255,255,255,.55);letter-spacing:.12em;text-transform:uppercase;font-size:11px}
+    .panel h2{font-size:24px;letter-spacing:-.05em;margin-top:6px}
+    .live{font-size:12px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:8px 11px;height:max-content}
+    .timer{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .time{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.11);border-radius:18px;padding:18px 10px;text-align:center}
+    .time strong{display:block;font-size:clamp(25px,4vw,40px)}
+    .time span{font-size:12px;color:rgba(255,255,255,.55)}
+    .note{font-size:13px;line-height:1.6;color:rgba(255,255,255,.58);margin-top:18px}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0 52px}
+    .stat{background:rgba(255,253,247,.88);border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 12px 34px rgba(0,0,0,.04)}
+    .stat span{color:var(--muted);font-size:13px}
+    .stat strong{display:block;font-size:34px;letter-spacing:-.05em;margin-top:6px}
+    .sectionHead{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:20px 0}
+    .sectionHead h2{font-family:Georgia,serif;font-size:clamp(34px,4vw,54px);letter-spacing:-.06em;line-height:.95}
+    .sectionHead p{max-width:540px;color:var(--muted);line-height:1.6;font-size:15px}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+    .filter{border:1px solid var(--line);background:rgba(255,255,255,.52);padding:10px 14px;border-radius:99px;cursor:pointer;font-weight:850;color:var(--muted)}
+    .filter.active,.filter:hover{background:var(--dark);color:#fff}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .card{background:rgba(255,253,247,.92);border:1px solid var(--line);border-radius:27px;padding:22px;box-shadow:0 14px 44px rgba(0,0,0,.045);position:relative;overflow:hidden;animation:rise .55s both}
+    @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    .card:hover{transform:translateY(-4px);box-shadow:0 24px 70px rgba(0,0,0,.09);transition:.25s}
+    .card:before{content:"";position:absolute;inset:0 0 auto;height:7px;background:var(--orange)}
+    .fulfilled:before{background:var(--green)}.progress:before{background:var(--orange)}.overdue:before{background:var(--red)}
+    .top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}
+    .top h3{font-size:20px;line-height:1.15;letter-spacing:-.04em}
+    .status{white-space:nowrap;border-radius:99px;padding:7px 10px;font-size:12px;font-weight:950;border:1px solid}
+    .fulfilled .status{background:var(--greenBg);color:var(--green);border-color:rgba(20,122,59,.22)}
+    .progress .status{background:var(--orangeBg);color:var(--orange);border-color:rgba(197,106,0,.22)}
+    .overdue .status{background:var(--redBg);color:var(--red);border-color:rgba(180,35,24,.22)}
+    .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:17px 0}
+    .meta div{background:rgba(0,0,0,.035);border-radius:16px;padding:12px}
+    .meta span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+    .meta strong{font-size:13px;line-height:1.25}
+    .card p{color:var(--muted);font-size:14px;line-height:1.65}
+    .source{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+    .source a{color:var(--ink);font-weight:900;text-decoration:none}
+    .method{margin:50px 0;background:var(--dark);color:#fff;border-radius:34px;padding:26px;display:grid;grid-template-columns:.9fr 1.1fr;gap:22px}
+    .method h2{font-family:Georgia,serif;font-size:40px;line-height:.95;letter-spacing:-.06em}
+    .rules{display:grid;gap:12px}
+    .rule{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.11);border-radius:18px;padding:16px;font-size:14px;line-height:1.6;color:rgba(255,255,255,.76)}
+    footer{text-align:center;color:var(--muted);font-size:13px;padding:26px;border-top:1px solid var(--line)}
+    .reveal{opacity:0;transform:translateY(18px);transition:.7s ease}.visible{opacity:1;transform:none}
+    @media(max-width:900px){.navlinks{display:none}.hero{grid-template-columns:1fr;padding-top:46px}.stats{grid-template-columns:repeat(2,1fr)}.sectionHead{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.method{grid-template-columns:1fr}}
+    @media(max-width:560px){.wrap{padding:0 14px}nav{padding:14px}.brand{font-size:17px}.hero{padding-top:38px}.hero p{font-size:15px}.timer{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:1fr}.card{padding:18px;border-radius:22px}.top{flex-direction:column}.meta{grid-template-columns:1fr}.source{flex-direction:column;align-items:flex-start}.method{border-radius:24px;padding:20px}}
   </style>
 </head>
-
 <body>
-  <div class="grain"></div>
+<header>
+  <nav>
+    <div class="brand"><div class="logo">OD</div>Odisha Promise Tracker</div>
+    <div class="navlinks">
+      <a href="#promises">Promises</a>
+      <a href="#method">Method</a>
+      <a href="#sources">Sources</a>
+    </div>
+  </nav>
+</header>
 
-  <header>
-    <nav class="nav">
-      <div class="brand">
-        <div class="mark">OD</div>
-        Odisha Promise Tracker
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="pill"><span class="pulse"></span>BJP Odisha Government · 2024–2029</div>
+      <h1>Promises deserve receipts.</h1>
+      <p>Tracking the 21 major manifesto promises made by BJP for Odisha. Green means fulfilled, orange means work in progress, and red means a stated deadline has passed.</p>
+      <div class="actions">
+        <a class="btn dark" href="#promises">View promises</a>
+        <a class="btn light" href="#method">Status rules</a>
       </div>
+    </div>
 
-      <div class="nav-links">
-        <a href="#promises">Promises</a>
-        <a href="#method">Methodology</a>
-        <a href="#sources">Sources</a>
+    <aside class="panel">
+      <div class="panelTop">
+        <div><small>Countdown</small><h2>Expected 2029 Assembly cycle</h2></div>
+        <div class="live">Live</div>
       </div>
-    </nav>
-  </header>
-
-  <main class="wrap">
-    <section class="hero">
-      <div>
-        <div class="eyebrow">
-          <span class="dot"></span>
-          BJP Government · Odisha · 2024–2029
-        </div>
-
-        <h1>Promises deserve receipts.</h1>
-
-        <p>
-          A public tracker for major promises made by the BJP government in Odisha.
-          Statuses are marked using available public evidence: green for fulfilled,
-          orange for work in progress, and red when a stated deadline has passed.
-        </p>
-
-        <div class="hero-actions">
-          <a class="btn primary" href="#promises">View promises</a>
-          <a class="btn secondary" href="#method">How status is decided</a>
-        </div>
+      <div class="timer">
+        <div class="time"><strong id="days">0</strong><span>Days</span></div>
+        <div class="time"><strong id="hours">0</strong><span>Hours</span></div>
+        <div class="time"><strong id="minutes">0</strong><span>Minutes</span></div>
+        <div class="time"><strong id="seconds">0</strong><span>Seconds</span></div>
       </div>
+      <p class="note">The exact 2029 election date is not announced yet. This uses a tentative full-cycle date.</p>
+    </aside>
+  </section>
 
-      <aside class="hero-panel">
-        <div class="panel-top">
-          <div>
-            <small>Countdown</small>
-            <h2>Expected 2029 Assembly cycle</h2>
-          </div>
-          <div class="live">Live timer</div>
-        </div>
+  <section class="stats reveal">
+    <div class="stat"><span>Total promises</span><strong id="total">0</strong></div>
+    <div class="stat"><span>Fulfilled</span><strong id="fulfilled">0</strong></div>
+    <div class="stat"><span>Work in progress</span><strong id="progress">0</strong></div>
+    <div class="stat"><span>Deadline passed</span><strong id="overdue">0</strong></div>
+  </section>
 
-        <div class="countdown">
-          <div class="time">
-            <strong id="days">0</strong>
-            <span>Days</span>
-          </div>
-          <div class="time">
-            <strong id="hours">0</strong>
-            <span>Hours</span>
-          </div>
-          <div class="time">
-            <strong id="minutes">0</strong>
-            <span>Minutes</span>
-          </div>
-          <div class="time">
-            <strong id="seconds">0</strong>
-            <span>Seconds</span>
-          </div>
-        </div>
+  <section id="promises">
+    <div class="sectionHead reveal">
+      <h2>Manifesto promises</h2>
+      <p>This page tracks promises only when there is public evidence that the promise was made. Status can be updated later with verified evidence.</p>
+    </div>
 
-        <p class="panel-note">
-          Election date is tentative because the Election Commission has not announced
-          the exact 2029 Odisha Assembly polling schedule.
-        </p>
-      </aside>
-    </section>
+    <div class="toolbar reveal">
+      <button class="filter active" data-filter="all">All</button>
+      <button class="filter" data-filter="fulfilled">Fulfilled</button>
+      <button class="filter" data-filter="progress">Work in progress</button>
+      <button class="filter" data-filter="overdue">Deadline passed</button>
+    </div>
 
-    <section class="stats reveal">
-      <div class="stat">
-        <span>Total tracked</span>
-        <strong id="totalCount">0</strong>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="method" class="method reveal">
+    <div><h2>Status without drama.</h2></div>
+    <div class="rules">
+      <div class="rule"><b>Green:</b> fulfilled with clear public evidence.</div>
+      <div class="rule"><b>Orange:</b> promise is still within its deadline, has no fixed deadline, or implementation needs further tracking.</div>
+      <div class="rule"><b>Red:</b> a specific promised deadline has passed and completion evidence is not available.</div>
+      <div class="rule" id="sources"><b>Sources:</b> BJP Odisha 2024 manifesto, official government portals, and credible public reporting.</div>
+    </div>
+  </section>
+</main>
+
+<footer>Independent public-information tracker · Built for Odisha accountability</footer>
+
+<script>
+const electionDate = new Date("2029-06-24T00:00:00+05:30").getTime();
+
+const promises = [
+  ["Zero tolerance on corruption and return chit-fund money to investors","Governance","5 May 2024","Within 18 months","overdue","Deadline passed","The manifesto promise included returning chit-fund money within 18 months. Marked red unless verified completion evidence is added.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Procure paddy at ₹3,100 per quintal with electronic weighing and no katni-chatni","Farmers","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the BJP Odisha manifesto. Status needs continuing procurement-cycle verification.","BJP manifesto","https://www.bjp.org/files/inline-documents/OD_English_Manifesto2024_5May.pdf"],
+  ["Subhadra Yojana: ₹50,000 cash voucher for women","Women welfare","5 May 2024","Encashable over 2 years","progress","Work in progress","Promise recorded in the manifesto; full delivery depends on beneficiary coverage and instalment completion.","BJP manifesto","https://www.bjp.org/files/inline-documents/OD_English_Manifesto2024_5May.pdf"],
+  ["Odia Samudaya Bhawan in all metro cities of India","Odia diaspora","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. No final completion deadline was specified.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Create 25 lakh Lakhpati Didis with industrial clusters for every 500 SHGs","Women / SHGs","5 May 2024","By 2027","progress","Work in progress","Deadline has not passed. Needs verified beneficiary and cluster data updates.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["₹10,000 annual lean-period allowance for each fisherman, plus harbours, cold stores and processing units","Fisheries","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. No single final completion date was specified.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Build 75,000 km rural and state highway roads","Infrastructure","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Needs annual road-construction verification.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Create 3.5 lakh jobs and develop industrial corridor, IT parks, EV, semiconductor and IT/ITES ecosystem","Economy / Jobs","5 May 2024","Jobs by 2029; corridor by June 2027","progress","Work in progress","The promise has term-linked targets. It should remain orange until verified final numbers and corridor status are available.","NDTV","https://www.ndtv.com/india-news/bjp-releases-manifesto-for-odisha-polls-promises-3-5-lakh-jobs-in-5-years-5595520"],
+  ["Legal, medical and engineering courses in Odia","Education","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Completion needs course-level implementation evidence.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Fill 1.5 lakh vacant government posts, including 65,000 posts within 2 years","Employment","5 May 2024","65,000 posts within 2 years","progress","Work in progress","Deadline window is still tied to the early term. Needs recruitment notification and appointment evidence.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Kendu Patra Tolali Kalyana Yojana: ₹2 per kerry, 35% bonus to pluckers, 10% to binders","Tribal / Forest livelihood","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Needs verified implementation order/payment evidence.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Complete 15 lakh PMAY houses and provide drinking water to 26 lakh households and 40,000 public places","Housing / Water","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Needs PMAY and Jal Jeevan Mission progress data.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Puri Jagannath Temple reforms: Ratna Bhandar key probe, inventory audit, report, matha compensation and opening all four gates","Culture / Temple","5 May 2024","Not specified","progress","Work in progress","Several components exist under one promise. Keep orange until each sub-item is individually verified.","BJP manifesto","https://www.bjp.org/files/inline-documents/OD_English_Manifesto2024_5May.pdf"],
+  ["Improve weavers’ livelihood, create 3 textile parks in Western Odisha and 51,000 jobs; Bunakar Samman Nidhi","Textiles / Weavers","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Needs park, job and pension implementation evidence.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["₹5 lakh insurance cover for unorganised labourers and e-Shram registration drive","Labour welfare","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Needs insurance notification and registration progress evidence.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Implement Ayushman Bharat PM-JAY in Odisha for residents with income below ₹8 lakh/year","Health","5 May 2024","Within 100 days","fulfilled","Fulfilled","Odisha later joined PM-JAY implementation. Keep green if your evidence link is attached.","PIB","https://www.pib.gov.in/PressReleasePage.aspx?PRID=2092541"],
+  ["Madho Singh Haath-Kharcha: ₹5,000 annually for tribal students","Tribal education","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Needs beneficiary/payment implementation evidence.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Mukhyamantri Sahayata Yojana: ₹3,000 monthly pension; ₹3,500 for 80+ elderly and 80% disabled","Social security","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Needs notification and disbursement evidence.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Implement PM Surya Ghar: Muft Bijli Yojana across urban and rural Odisha households","Energy","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Needs installation and subsidy progress data.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Make Odisha the state with the third-largest tourist footfall","Tourism","5 May 2024","Not specified","progress","Work in progress","Promise recorded in the manifesto. Needs official tourism ranking/footfall data.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"],
+  ["Mission Swasthya Odisha: 36,000 beds, modern CHCs, 100 CHCs upgraded, nursing/medical/super-speciality facilities in every district","Health infrastructure","5 May 2024","CHC modernisation by 2027","progress","Work in progress","Deadline has not passed. Needs verified health infrastructure progress data.","OTV","https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"]
+];
+
+function countdown(){
+  const now = Date.now();
+  const d = Math.max(electionDate - now, 0);
+  document.getElementById("days").textContent = Math.floor(d/86400000).toLocaleString("en-IN");
+  document.getElementById("hours").textContent = Math.floor(d/3600000%24);
+  document.getElementById("minutes").textContent = Math.floor(d/60000%60);
+  document.getElementById("seconds").textContent = Math.floor(d/1000%60);
+}
+
+function stats(){
+  document.getElementById("total").textContent = promises.length;
+  document.getElementById("fulfilled").textContent = promises.filter(p=>p[4]==="fulfilled").length;
+  document.getElementById("progress").textContent = promises.filter(p=>p[4]==="progress").length;
+  document.getElementById("overdue").textContent = promises.filter(p=>p[4]==="overdue").length;
+}
+
+function render(filter="all"){
+  const grid=document.getElementById("grid");
+  grid.innerHTML="";
+  promises.filter(p=>filter==="all"||p[4]===filter).forEach((p,i)=>{
+    const card=document.createElement("article");
+    card.className=`card ${p[4]}`;
+    card.style.animationDelay=`${i*35}ms`;
+    card.innerHTML=`
+      <div class="top"><h3>${p[0]}</h3><span class="status">${p[5]}</span></div>
+      <div class="meta">
+        <div><span>Category</span><strong>${p[1]}</strong></div>
+        <div><span>Promised</span><strong>${p[2]}</strong></div>
+        <div><span>Deadline</span><strong>${p[3]}</strong></div>
       </div>
+      <p>${p[6]}</p>
+      <div class="source"><span>Evidence source</span><a href="${p[8]}" target="_blank" rel="noopener">${p[7]} →</a></div>
+    `;
+    grid.appendChild(card);
+  });
+}
 
-      <div class="stat">
-        <span>Fulfilled</span>
-        <strong id="fulfilledCount">0</strong>
-      </div>
+document.querySelectorAll(".filter").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    render(btn.dataset.filter);
+  }
+});
 
-      <div class="stat">
-        <span>Work in progress</span>
-        <strong id="progressCount">0</strong>
-      </div>
+function reveal(){
+  document.querySelectorAll(".reveal").forEach(el=>{
+    if(el.getBoundingClientRect().top < innerHeight - 80) el.classList.add("visible");
+  });
+}
 
-      <div class="stat">
-        <span>Deadline passed</span>
-        <strong id="overdueCount">0</strong>
-      </div>
-    </section>
-
-    <section id="promises">
-      <div class="section-head reveal">
-        <h2>Tracked promises</h2>
-        <p>
-          Started with key, verifiable promises only. Better to track fewer promises accurately
-          than dump 100 claims and become WhatsApp University, babe.
-        </p>
-      </div>
-
-      <div class="toolbar reveal">
-        <button class="filter active" data-filter="all">All</button>
-        <button class="filter" data-filter="fulfilled">Fulfilled</button>
-        <button class="filter" data-filter="progress">Work in progress</button>
-        <button class="filter" data-filter="overdue">Deadline passed</button>
-      </div>
-
-      <div class="promise-grid" id="promiseGrid"></div>
-    </section>
-
-    <section id="method" class="methodology reveal">
-      <div>
-        <h2>Status rules, no drama.</h2>
-      </div>
-
-      <div class="rules">
-        <div class="rule">
-          <strong>Green · Fulfilled:</strong> The promise has clear public evidence of implementation or completion.
-        </div>
-        <div class="rule">
-          <strong>Orange · Work in progress:</strong> The promise has started, but the full target or final outcome is not complete yet.
-        </div>
-        <div class="rule">
-          <strong>Red · Deadline passed:</strong> A clear deadline was promised and available evidence does not show completion.
-        </div>
-        <div class="rule" id="sources">
-          <strong>Evidence standard:</strong> Prefer official government/party sources first, then reliable news reports for verification.
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    Independent public-information tracker · Last updated: 26 May 2026
-  </footer>
-
-  <script>
-    const electionDate = new Date("2029-06-24T00:00:00+05:30").getTime();
-
-    const promises = [
-      {
-        title: "Open all four gates of Puri Jagannath Temple",
-        category: "Culture",
-        madeOn: "5 May 2024",
-        deadline: "Immediate / First cabinet phase",
-        status: "fulfilled",
-        statusText: "Fulfilled",
-        evidence: "All four gates were opened for devotees on 13 June 2024 after the new government took charge.",
-        sourceLabel: "Indian Express / Cabinet decision coverage",
-        sourceUrl: "https://indianexpress.com/article/explained/explained-politics/all-four-gates-puri-jagannath-temple-opened-bjp-odisha-9390637/"
-      },
-      {
-        title: "Procure paddy at ₹3,100 per quintal",
-        category: "Farmers",
-        madeOn: "5 May 2024",
-        deadline: "Term period",
-        status: "fulfilled",
-        statusText: "Fulfilled",
-        evidence: "The state began paying ₹3,100 per quintal through procurement/DBT reporting from December 2024.",
-        sourceLabel: "TOI / MSP implementation coverage",
-        sourceUrl: "https://timesofindia.indiatimes.com/city/bhubaneswar/odisha-government-increases-msp-for-paddy-to-rs-3100quintal/articleshow/116110138.cms"
-      },
-      {
-        title: "Launch Subhadra Yojana for women",
-        category: "Women welfare",
-        madeOn: "5 May 2024",
-        deadline: "Scheme launch in 2024; benefit cycle continues",
-        status: "progress",
-        statusText: "Work in progress",
-        evidence: "Official Subhadra portal is active. Scheme benefit is structured across multiple instalments, so full benefit completion is ongoing.",
-        sourceLabel: "Government of Odisha · Subhadra portal",
-        sourceUrl: "https://subhadra.odisha.gov.in/"
-      },
-      {
-        title: "Implement Ayushman Bharat PM-JAY in Odisha",
-        category: "Health",
-        madeOn: "2024 campaign period",
-        deadline: "FY 2024–25 / rollout phase",
-        status: "fulfilled",
-        statusText: "Fulfilled",
-        evidence: "PIB stated Odisha became the 34th State/UT to implement AB PM-JAY, converged with Gopabandhu Jan Arogya Yojana.",
-        sourceLabel: "PIB",
-        sourceUrl: "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2092541"
-      },
-      {
-        title: "Ratna Bhandar opening, repair and inventory process",
-        category: "Culture",
-        madeOn: "5 May 2024",
-        deadline: "No single final deadline stated",
-        status: "progress",
-        statusText: "Work in progress",
-        evidence: "Ratna Bhandar was reopened in July 2024 and restoration progressed; full inventory/cataloguing process remains the key final step.",
-        sourceLabel: "TOI / Ratna Bhandar restoration coverage",
-        sourceUrl: "https://timesofindia.indiatimes.com/city/bhubaneswar/ratna-bhandar-restoration-to-be-over-by-july-8-minister/articleshow/121396722.cms"
-      },
-      {
-        title: "Create 3.5 lakh jobs in five years",
-        category: "Employment",
-        madeOn: "5 May 2024",
-        deadline: "12 June 2029",
-        status: "progress",
-        statusText: "Work in progress",
-        evidence: "The promise has a five-year window. Until verified final job creation numbers are published against the target, status remains in progress.",
-        sourceLabel: "NDTV / Manifesto coverage",
-        sourceUrl: "https://www.ndtv.com/india-news/bjp-releases-manifesto-for-odisha-polls-promises-3-5-lakh-jobs-in-5-years-5595520"
-      },
-      {
-        title: "Create 25 lakh Lakhpati Didis by 2027",
-        category: "Women / SHGs",
-        madeOn: "5 May 2024",
-        deadline: "31 December 2027",
-        status: "progress",
-        statusText: "Work in progress",
-        evidence: "Deadline has not passed yet. Needs periodic verified beneficiary count updates.",
-        sourceLabel: "OTV / Manifesto promise coverage",
-        sourceUrl: "https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"
-      },
-      {
-        title: "Return chit fund money to investors within 18 months",
-        category: "Finance / Governance",
-        madeOn: "5 May 2024",
-        deadline: "12 December 2025",
-        status: "overdue",
-        statusText: "Deadline passed",
-        evidence: "The 18-month deadline has passed. Keep this red unless verified official evidence shows complete return of money to affected investors.",
-        sourceLabel: "OTV / Manifesto promise coverage",
-        sourceUrl: "https://odishatv.in/news/politics/odisha-elections/here-are-top-21-promises-made-by-bjp-in-odisha-manifesto-234382"
-      }
-    ];
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = electionDate - now;
-
-      const safeDistance = Math.max(distance, 0);
-      const days = Math.floor(safeDistance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((safeDistance / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((safeDistance / (1000 * 60)) % 60);
-      const seconds = Math.floor((safeDistance / 1000) % 60);
-
-      document.getElementById("days").textContent = days.toLocaleString("en-IN");
-      document.getElementById("hours").textContent = hours;
-      document.getElementById("minutes").textContent = minutes;
-      document.getElementById("seconds").textContent = seconds;
-    }
-
-    function renderStats() {
-      document.getElementById("totalCount").textContent = promises.length;
-      document.getElementById("fulfilledCount").textContent = promises.filter(p => p.status === "fulfilled").length;
-      document.getElementById("progressCount").textContent = promises.filter(p => p.status === "progress").length;
-      document.getElementById("overdueCount").textContent = promises.filter(p => p.status === "overdue").length;
-    }
-
-    function renderPromises(filter = "all") {
-      const grid = document.getElementById("promiseGrid");
-      grid.innerHTML = "";
-
-      const filteredPromises = filter === "all"
-        ? promises
-        : promises.filter(promise => promise.status === filter);
-
-      filteredPromises.forEach((promise, index) => {
-        const card = document.createElement("article");
-        card.className = `promise ${promise.status}`;
-        card.style.animationDelay = `${index * 60}ms`;
-
-        card.innerHTML = `
-          <div class="promise-top">
-            <h3>${promise.title}</h3>
-            <span class="status">${promise.statusText}</span>
-          </div>
-
-          <div class="meta">
-            <div>
-              <span>Category</span>
-              <strong>${promise.category}</strong>
-            </div>
-
-            <div>
-              <span>Promised</span>
-              <strong>${promise.madeOn}</strong>
-            </div>
-
-            <div>
-              <span>Deadline</span>
-              <strong>${promise.deadline}</strong>
-            </div>
-          </div>
-
-          <p>${promise.evidence}</p>
-
-          <div class="source">
-            <span>Evidence source</span>
-            <a href="${promise.sourceUrl}" target="_blank" rel="noopener noreferrer">${promise.sourceLabel} →</a>
-          </div>
-        `;
-
-        grid.appendChild(card);
-      });
-    }
-
-    function setupFilters() {
-      const filters = document.querySelectorAll(".filter");
-
-      filters.forEach(button => {
-        button.addEventListener("click", () => {
-          filters.forEach(item => item.classList.remove("active"));
-          button.classList.add("active");
-          renderPromises(button.dataset.filter);
-        });
-      });
-    }
-
-    function revealOnScroll() {
-      const reveals = document.querySelectorAll(".reveal");
-
-      reveals.forEach(element => {
-        const top = element.getBoundingClientRect().top;
-        const windowHeight = window.innerHeight;
-
-        if (top < windowHeight - 90) {
-          element.classList.add("visible");
-        }
-      });
-    }
-
-    updateCountdown();
-    renderStats();
-    renderPromises();
-    setupFilters();
-    revealOnScroll();
-
-    setInterval(updateCountdown, 1000);
-    window.addEventListener("scroll", revealOnScroll);
-  </script>
+countdown(); stats(); render(); reveal();
+setInterval(countdown,1000);
+addEventListener("scroll",reveal);
+</script>
 </body>
 </html>
